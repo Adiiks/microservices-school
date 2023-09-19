@@ -1,0 +1,13 @@
+version: '2.15'
+
+services:
+
+  config-server:
+    image: school/configserver
+    ports:
+      - "8888:8888"
+    networks:
+      school:
+
+networks:
+  school:
