@@ -9,5 +9,14 @@ services:
     networks:
       school:
 
+  eureka-server:
+    image: school/eureka-server
+    ports:
+      - "8761:8761"
+    depends_on:
+      - config-server
+    networks:
+      school:
+
 networks:
   school:
