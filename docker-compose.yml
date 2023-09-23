@@ -2,6 +2,17 @@ version: '2.15'
 
 services:
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:22.0.3
+    ports:
+      - "8080:8080"
+    environment:
+      KEYCLOAK_ADMIN: "admin"
+      KEYCLOAK_ADMIN_PASSWORD: "admin"
+    command: "start-dev"
+    networks:
+      school:
+
   config-server:
     image: school/configserver
     ports:
