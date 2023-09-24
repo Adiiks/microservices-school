@@ -16,7 +16,7 @@ public class User {
     private Integer id;
 
     @Column(nullable = false)
-    private Integer pesel;
+    private String pesel;
 
     @Column(nullable = false)
     private String names;

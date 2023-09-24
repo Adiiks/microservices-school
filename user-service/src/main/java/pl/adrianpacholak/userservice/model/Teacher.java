@@ -19,8 +19,8 @@ import lombok.experimental.SuperBuilder;
 public class Teacher extends User {
 
     @Column(nullable = false)
-    private Integer phoneNumber;
+    private String phoneNumber;
 
     @Column(nullable = false)
-    private Integer officeNumber;
+    private String officeNumber;
 }
