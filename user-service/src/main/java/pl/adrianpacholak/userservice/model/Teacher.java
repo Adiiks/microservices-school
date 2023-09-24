@@ -22,5 +22,5 @@ public class Teacher extends User {
     private String phoneNumber;
 
     @Column(nullable = false)
-    private String officeNumber;
+    private Integer officeNumber;
 }

@@ -17,6 +17,11 @@ This is a service dicovery. It contains locations of services and also check fro
 ## Gateway Server
 
 This is service which acts as an entry point to the application. Every request come first to this service and after authentication and authorization success it passes request to particular service.
+## User Service
+
+Service for managing users. We have three types of user: Admin, Teacher and Student. Service offers following features:
+
+- creating students and teachers (saving them in Keycloak Server)
 ## Docker Compose
 
 Docker compose file for running services. Currently only contains Configserver, Eureka server, MySQL and Keycloak.
