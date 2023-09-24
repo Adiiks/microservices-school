@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class JwtUtils {
 
     public static final String AUTH_HEADER = "Authorization";
-    public static final String USERNAME_CLAIM = "preferred_username" ;
+    public static final String USERNAME_CLAIM = "preferred_username";
 
     public String getUsername(HttpHeaders headers) {
         String authToken = headers.get(AUTH_HEADER)

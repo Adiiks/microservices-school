@@ -2,6 +2,16 @@ version: '2.15'
 
 services:
 
+  db:
+    image: mysql
+    environment:
+      MYSQL_DATABASE: 'school_db'
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - '3306:3306'
+    networks:
+      school:
+
   keycloak:
     image: quay.io/keycloak/keycloak:22.0.3
     ports:
