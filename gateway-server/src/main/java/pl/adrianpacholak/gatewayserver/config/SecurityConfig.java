@@ -21,8 +21,14 @@ public class SecurityConfig {
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity serverHttpSecurity) {
         serverHttpSecurity.authorizeExchange(exchange -> {
+            // USER-SERVICE
             exchange.pathMatchers(HttpMethod.POST, "/user-service/students").hasRole("ADMIN");
             exchange.pathMatchers(HttpMethod.POST, "/user-service/teachers").hasRole("ADMIN");
+
+            // FACULTY-SERVICE
+            exchange.pathMatchers(HttpMethod.POST, "/faculty-service/faculties").hasRole("ADMIN");
+
+            // GENERAL
             exchange.anyExchange().authenticated();
         })
                 .oauth2ResourceServer(oAuth2ResourceServerSpec ->
