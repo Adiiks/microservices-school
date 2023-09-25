@@ -8,13 +8,13 @@ I created that project to learn and test my skills in developing microservices a
 
 
 
-## Configserver
+## Configserver (Spring Cloud Config)
 
 This is configuration server which contains all configurations for other services. The config files are located in github under this link: https://github.com/Adiiks/microservices-school-configs.
-## Eureka Server
+## Eureka Server (Spring Cloud Netflix)
 
 This is a service dicovery. It contains locations of services and also check from time to time if particular service is up or down. Every service during start register itself with eureka server.
-## Gateway Server
+## Gateway Server (Spring Cloud Gateway)
 
 This is service which acts as an entry point to the application. Every request come first to this service and after authentication and authorization success it passes request to particular service.
 ## User Service
@@ -22,6 +22,9 @@ This is service which acts as an entry point to the application. Every request c
 Service for managing users. We have three types of user: Admin, Teacher and Student. Service offers following features:
 
 - creating students and teachers (saving them in Keycloak Server)
+## Faculty Service
+
+Service for managing faculties (example: Faculty of Computer Science). Service offers following features:
 ## Docker Compose
 
 Docker compose file for running services. Currently only contains Configserver, Eureka server, MySQL and Keycloak.
