@@ -19,6 +19,8 @@ public record UserDTO(
         @NotBlank(message = "Password is required")
         String password,
         @NotBlank(message = "Position is required")
-        String position
+        String position,
+        @NotNull(message = "Faculty id is required")
+        Integer facultyId
 ) {
 }

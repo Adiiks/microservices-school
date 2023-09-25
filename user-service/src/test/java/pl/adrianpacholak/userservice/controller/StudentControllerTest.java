@@ -32,20 +32,20 @@ class StudentControllerTest {
     @Test
     @DisplayName("Create new student - Validation failed")
     void createStudentValidationFail() throws Exception {
-        UserDTO userDTO = new UserDTO("123aaa1312", "", "", "sssssss.com", "", "");
+        UserDTO userDTO = new UserDTO("123aaa1312", "", "", "sssssss.com", "", "", null);
         StudentDTO studentDTO = new StudentDTO(userDTO);
 
         mockMvc.perform(post("/students")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(studentDTO)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.errors", hasSize(6)));
+                .andExpect(jsonPath("$.errors", hasSize(7)));
     }
 
     @Test
     @DisplayName("Create new student - Success")
     void createStudent() throws Exception {
-        UserDTO userDTO = new UserDTO("57101805724", "Jan", "Kowalski", "jan@gmail.com", "password", "lecturer");
+        UserDTO userDTO = new UserDTO("57101805724", "Jan", "Kowalski", "jan@gmail.com", "password", "lecturer", 12);
         StudentDTO studentDTO = new StudentDTO(userDTO);
 
         mockMvc.perform(post("/students")

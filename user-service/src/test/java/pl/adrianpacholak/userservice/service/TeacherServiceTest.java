@@ -8,6 +8,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.server.ResponseStatusException;
+import pl.adrianpacholak.userservice.client.FacultyClient;
 import pl.adrianpacholak.userservice.converter.TeacherConverter;
 import pl.adrianpacholak.userservice.dto.TeacherDTO;
 import pl.adrianpacholak.userservice.dto.UserDTO;
@@ -15,11 +17,13 @@ import pl.adrianpacholak.userservice.model.Teacher;
 import pl.adrianpacholak.userservice.repository.TeacherRepository;
 import pl.adrianpacholak.userservice.service.client.KeycloakClient;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import java.util.Collections;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class TeacherServiceTest {
@@ -32,6 +36,9 @@ class TeacherServiceTest {
     @Mock
     KeycloakClient keycloakClient;
 
+    @Mock
+    FacultyClient facultyClient;
+
     TeacherConverter teacherConverter = new TeacherConverter();
 
     @Captor
@@ -39,14 +46,19 @@ class TeacherServiceTest {
 
     @BeforeEach
     void setUp() {
-        teacherService = new TeacherService(teacherRepository, teacherConverter, keycloakClient);
+        teacherService = new TeacherService(teacherRepository, teacherConverter, keycloakClient, facultyClient);
     }
 
     @DisplayName("Create new teacher - SUCCESS")
     @Test
     void createTeacher() {
-        UserDTO userDTO = new UserDTO("12345678901", "Jan", "Kowalski", "jan@gmail.com", "password", "lecturer");
+        UserDTO userDTO = new UserDTO("12345678901", "Jan", "Kowalski", "jan@gmail.com", "password", "lecturer", 12);
         TeacherDTO teacherDTO = new TeacherDTO(userDTO, "123456789", 10);
+
+        Map<String, Boolean> response = Collections.singletonMap("exists", true);
+
+        when(facultyClient.checkFacultyExists(anyInt()))
+                .thenReturn(response);
 
         teacherService.createTeacher(teacherDTO);
 
@@ -63,5 +75,19 @@ class TeacherServiceTest {
         assertEquals(teacherDTO.officeNumber(), teacherDb.getOfficeNumber());
         assertEquals(teacherDTO.basicInfo().position(), teacherDb.getPosition());
         assertNull(teacherDb.getPageUrl());
+    }
+
+    @DisplayName("Create new teacher - Faculty Not Exists")
+    @Test
+    void createTeacherFacultyNotExists() {
+        UserDTO userDTO = new UserDTO("12345678901", "Jan", "Kowalski", "jan@gmail.com", "password", "lecturer", 12);
+        TeacherDTO teacherDTO = new TeacherDTO(userDTO, "123456789", 10);
+
+        Map<String, Boolean> response = Collections.singletonMap("exists", false);
+
+        when(facultyClient.checkFacultyExists(anyInt()))
+                .thenReturn(response);
+
+        assertThrows(ResponseStatusException.class, () -> teacherService.createTeacher(teacherDTO));
     }
 }

@@ -30,5 +30,8 @@ public class User {
     @Column(nullable = false)
     private String position;
 
+    @Column(nullable = false)
+    private Integer facultyId;
+
     private String pageUrl;
 }

@@ -19,6 +19,7 @@ public class TeacherConverter {
                 .phoneNumber(teacherDTO.phoneNumber())
                 .officeNumber(teacherDTO.officeNumber())
                 .position(basicInfo.position())
+                .facultyId(teacherDTO.basicInfo().facultyId())
                 .build();
     }
 }
