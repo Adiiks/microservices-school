@@ -12,6 +12,10 @@ import pl.adrianpacholak.facultyservice.dto.FacultyRequest;
 import pl.adrianpacholak.facultyservice.service.FacultyService;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -52,5 +56,16 @@ class FacultyControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated());
+    }
+
+    @DisplayName("Check if faculty with particular id exists")
+    @Test
+    void checkFacultyExists() throws Exception {
+        when(facultyService.checkFacultyExists(anyInt()))
+                .thenReturn(true);
+
+        mockMvc.perform(get("/faculties/exists/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("exists", is(true)));
     }
 }

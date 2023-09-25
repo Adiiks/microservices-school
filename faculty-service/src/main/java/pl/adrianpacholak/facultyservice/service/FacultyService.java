@@ -28,4 +28,8 @@ public class FacultyService {
 
         facultyRepository.save(newFaculty);
     }
+
+    public boolean checkFacultyExists(Integer facultyId) {
+        return facultyRepository.existsById(facultyId);
+    }
 }
