@@ -18,6 +18,7 @@ public class TeacherConverter {
                 .pesel(basicInfo.pesel())
                 .phoneNumber(teacherDTO.phoneNumber())
                 .officeNumber(teacherDTO.officeNumber())
+                .position(basicInfo.position())
                 .build();
     }
 }

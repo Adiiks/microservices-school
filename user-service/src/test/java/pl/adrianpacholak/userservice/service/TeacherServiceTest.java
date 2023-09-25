@@ -45,7 +45,7 @@ class TeacherServiceTest {
     @DisplayName("Create new teacher - SUCCESS")
     @Test
     void createTeacher() {
-        UserDTO userDTO = new UserDTO("12345678901", "Jan", "Kowalski", "jan@gmail.com", "password");
+        UserDTO userDTO = new UserDTO("12345678901", "Jan", "Kowalski", "jan@gmail.com", "password", "lecturer");
         TeacherDTO teacherDTO = new TeacherDTO(userDTO, "123456789", 10);
 
         teacherService.createTeacher(teacherDTO);
@@ -61,6 +61,7 @@ class TeacherServiceTest {
         assertEquals(teacherDTO.basicInfo().email(), teacherDb.getEmail());
         assertEquals(teacherDTO.phoneNumber(), teacherDb.getPhoneNumber());
         assertEquals(teacherDTO.officeNumber(), teacherDb.getOfficeNumber());
+        assertEquals(teacherDTO.basicInfo().position(), teacherDb.getPosition());
         assertNull(teacherDb.getPageUrl());
     }
 }

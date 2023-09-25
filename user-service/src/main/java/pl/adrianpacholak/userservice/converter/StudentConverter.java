@@ -16,6 +16,7 @@ public class StudentConverter {
                 .names(basicInfo.names())
                 .lastname(basicInfo.lastname())
                 .pesel(basicInfo.pesel())
+                .position(basicInfo.position())
                 .build();
     }
 }

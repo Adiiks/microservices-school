@@ -44,7 +44,7 @@ class StudentServiceTest {
     @DisplayName("Create new student - SUCCESS")
     @Test
     void createStudent() {
-        UserDTO userDTO = new UserDTO("12345678901", "Jan", "Kowalski", "jan@gmail.com", "password");
+        UserDTO userDTO = new UserDTO("12345678901", "Jan", "Kowalski", "jan@gmail.com", "password", "lecturer");
         StudentDTO studentDTO = new StudentDTO(userDTO);
 
         studentService.createStudent(studentDTO);
@@ -58,6 +58,7 @@ class StudentServiceTest {
         assertEquals(studentDTO.basicInfo().names(), studentDb.getNames());
         assertEquals(studentDTO.basicInfo().lastname(), studentDb.getLastname());
         assertEquals(studentDTO.basicInfo().email(), studentDb.getEmail());
+        assertEquals(studentDTO.basicInfo().position(), studentDb.getPosition());
         assertNull(studentDb.getPageUrl());
         assertTrue(studentDb.getIsStillStudying());
     }
