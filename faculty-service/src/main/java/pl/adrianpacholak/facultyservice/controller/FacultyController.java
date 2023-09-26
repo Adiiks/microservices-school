@@ -8,6 +8,7 @@ import pl.adrianpacholak.facultyservice.dto.FacultyRequest;
 import pl.adrianpacholak.facultyservice.service.FacultyService;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -27,5 +28,10 @@ public class FacultyController {
     public Map<String, Boolean> checkFacultyExists(@PathVariable Integer facultyId) {
         boolean isFacultyExists = facultyService.checkFacultyExists(facultyId);
         return Collections.singletonMap("exists", isFacultyExists);
+    }
+
+    @PostMapping("/search/ids")
+    public Map<Integer, String> getFacultiesByIds(@RequestBody List<Integer> facultiesIds) {
+        return facultyService.getFacultiesByIds(facultiesIds);
     }
 }

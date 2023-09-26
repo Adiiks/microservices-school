@@ -11,14 +11,17 @@ import org.springframework.test.web.servlet.MockMvc;
 import pl.adrianpacholak.facultyservice.dto.FacultyRequest;
 import pl.adrianpacholak.facultyservice.service.FacultyService;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(FacultyController.class)
 class FacultyControllerTest {
@@ -67,5 +70,21 @@ class FacultyControllerTest {
         mockMvc.perform(get("/faculties/exists/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("exists", is(true)));
+    }
+
+    @DisplayName("Get faculties by list of ids")
+    @Test
+    void getFacultiesByIds() throws Exception {
+        List<Integer> facultiesIds = List.of(1);
+        Map<Integer, String> faculties = Collections.singletonMap(1, "Faculty of Computer Science");
+
+        when(facultyService.getFacultiesByIds(facultiesIds))
+                .thenReturn(faculties);
+
+        mockMvc.perform(post("/faculties/search/ids")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(facultiesIds)))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(faculties)));
     }
 }

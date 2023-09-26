@@ -10,6 +10,10 @@ import pl.adrianpacholak.facultyservice.dto.FacultyRequest;
 import pl.adrianpacholak.facultyservice.model.Faculty;
 import pl.adrianpacholak.facultyservice.repository.FacultyRepository;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class FacultyService {
@@ -31,5 +35,11 @@ public class FacultyService {
 
     public boolean checkFacultyExists(Integer facultyId) {
         return facultyRepository.existsById(facultyId);
+    }
+
+    public Map<Integer, String> getFacultiesByIds(List<Integer> facultiesIds) {
+        return facultyRepository.findByIdIn(facultiesIds)
+                .stream()
+                .collect(Collectors.toMap(Faculty::getId, Faculty::getName));
     }
 }

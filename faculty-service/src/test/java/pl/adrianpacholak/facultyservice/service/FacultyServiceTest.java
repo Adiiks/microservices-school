@@ -14,6 +14,9 @@ import pl.adrianpacholak.facultyservice.dto.FacultyRequest;
 import pl.adrianpacholak.facultyservice.model.Faculty;
 import pl.adrianpacholak.facultyservice.repository.FacultyRepository;
 
+import java.util.List;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -66,5 +69,22 @@ class FacultyServiceTest {
         assertEquals(request.name(), faculty.getName());
         assertEquals(request.phoneNumber(), faculty.getPhoneNumber());
         assertEquals(request.address(), faculty.getAddress());
+    }
+
+    @DisplayName("Get list of faculties based on list of ids")
+    @Test
+    void getFacultiesByIds() {
+        List<Integer> facultiesIds = List.of(1);
+        Faculty facultyDb = Faculty.builder()
+                .id(1)
+                .name("Faculty of Computer Science")
+                .build();
+        List<Faculty> facultiesDb = List.of(facultyDb);
+
+        when(facultyRepository.findByIdIn(facultiesIds))
+                .thenReturn(facultiesDb);
+
+        Map<Integer, String> faculties = facultyService.getFacultiesByIds(facultiesIds);
+        assertEquals(facultyDb.getName(), faculties.get(facultyDb.getId()));
     }
 }
