@@ -16,6 +16,7 @@ import pl.adrianpacholak.facultyservice.repository.FacultyRepository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -86,5 +87,29 @@ class FacultyServiceTest {
 
         Map<Integer, String> faculties = facultyService.getFacultiesByIds(facultiesIds);
         assertEquals(facultyDb.getName(), faculties.get(facultyDb.getId()));
+    }
+
+    @DisplayName("Get faculty ID based on name - Not found")
+    @Test
+    void getFacultyIdByName_NotFound() {
+        when(facultyRepository.findByName(anyString())).thenReturn(Optional.empty());
+
+        assertThrows(ResponseStatusException.class,
+                () -> facultyService.getFacultyIdByName("Faculty of Computer Science"));
+    }
+
+    @DisplayName("Get faculty ID based on name")
+    @Test
+    void getFacultyIdByName() {
+        Integer facultyId = 1;
+        Faculty faculty = Faculty.builder()
+                .id(facultyId)
+                .build();
+
+        when(facultyRepository.findByName(anyString())).thenReturn(Optional.of(faculty));
+
+        Map<String, Integer> facultyIdResponse = facultyService.getFacultyIdByName("Faculty of Computer Science");
+
+        assertEquals(facultyId, facultyIdResponse.get("facultyId"));
     }
 }

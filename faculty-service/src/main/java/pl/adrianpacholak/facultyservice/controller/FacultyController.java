@@ -34,4 +34,9 @@ public class FacultyController {
     public Map<Integer, String> getFacultiesByIds(@RequestBody List<Integer> facultiesIds) {
         return facultyService.getFacultiesByIds(facultiesIds);
     }
+
+    @GetMapping("/faculty-name/{facultyName}")
+    public Map<String, Integer> getFacultyId(@PathVariable String facultyName) {
+        return facultyService.getFacultyIdByName(facultyName);
+    }
 }

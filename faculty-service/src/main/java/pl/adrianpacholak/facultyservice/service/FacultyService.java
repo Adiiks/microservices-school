@@ -10,6 +10,7 @@ import pl.adrianpacholak.facultyservice.dto.FacultyRequest;
 import pl.adrianpacholak.facultyservice.model.Faculty;
 import pl.adrianpacholak.facultyservice.repository.FacultyRepository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -41,5 +42,13 @@ public class FacultyService {
         return facultyRepository.findByIdIn(facultiesIds)
                 .stream()
                 .collect(Collectors.toMap(Faculty::getId, Faculty::getName));
+    }
+
+    public Map<String, Integer> getFacultyIdByName(String facultyName) {
+        Faculty faculty = facultyRepository.findByName(facultyName)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Faculty not found"));
+
+        return Collections.singletonMap("facultyId", faculty.getId());
     }
 }

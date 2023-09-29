@@ -1,13 +1,16 @@
 package pl.adrianpacholak.facultyservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import pl.adrianpacholak.facultyservice.dto.FacultyRequest;
 import pl.adrianpacholak.facultyservice.service.FacultyService;
 
@@ -18,25 +21,31 @@ import java.util.Map;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(FacultyController.class)
+@ExtendWith(MockitoExtension.class)
 class FacultyControllerTest {
 
-    @Autowired
-    private FacultyController facultyController;
-
-    @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @InjectMocks
+    private FacultyController facultyController;
+
+    @Mock
     private FacultyService facultyService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+    @BeforeEach
+    void setUp() {
+        mockMvc = MockMvcBuilders.standaloneSetup(facultyController)
+                .setControllerAdvice(new GlobalExceptionHandler())
+                .build();
+    }
 
     @DisplayName("Create new faculty - Validation failed")
     @Test
@@ -86,5 +95,17 @@ class FacultyControllerTest {
                 .content(objectMapper.writeValueAsString(facultiesIds)))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(faculties)));
+    }
+
+    @DisplayName("Get faculty ID based on faculty name")
+    @Test
+    void getFacultyId() throws Exception {
+        Map<String, Integer> response = Collections.singletonMap("facultyId", 1);
+
+        when(facultyService.getFacultyIdByName(anyString())).thenReturn(response);
+
+        mockMvc.perform(get("/faculties/faculty-name/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("facultyId", is(1)));
     }
 }
