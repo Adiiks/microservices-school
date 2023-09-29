@@ -17,4 +17,7 @@ public interface FacultyClient {
 
     @PostMapping("/search/ids")
     Map<Integer, String> getFacultiesByIds(@RequestBody Set<Integer> facultiesIds);
+
+    @GetMapping("/faculty-name/{facultyName}")
+    Map<String, Integer> getFacultyId(@PathVariable String facultyName);
 }

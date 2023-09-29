@@ -22,7 +22,8 @@ This is service which acts as an entry point to the application. Every request c
 Service for managing users. We have three types of user: Admin, Teacher and Student. Service offers following features:
 
 - creating students and teachers (saving them in Keycloak Server)
-- searching users (pagination) by names, lastname 
+- searching users (pagination) by names, lastname
+- getting list of users (pagination) based on faculty name
 ## Faculty Service
 
 Service for managing faculties (example: Faculty of Computer Science). Service offers following features:

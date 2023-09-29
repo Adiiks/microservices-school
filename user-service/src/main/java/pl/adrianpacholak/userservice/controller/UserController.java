@@ -21,4 +21,9 @@ public class UserController {
     public Page<UserResponse> searchUsersByFullName(@RequestParam String fullName, Pageable pageable) {
         return userService.searchUsersByFullName(fullName, pageable);
     }
+
+    @GetMapping("/search/faculty-name")
+    public Page<UserResponse> searchUsersByFacultyName(@RequestParam String facultyName, Pageable pageable) {
+        return userService.searchUsersByFacultyName(facultyName, pageable);
+    }
 }

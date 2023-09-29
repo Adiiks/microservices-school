@@ -1,5 +1,6 @@
 package pl.adrianpacholak.userservice.service;
 
+import feign.FeignException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -80,6 +81,33 @@ class UserServiceTest {
 
         assertEquals(1, facultiesIdsAc.getValue().size());
         assertEquals(1, userResponsePage.getContent().size());
+    }
+
+    @DisplayName("Get users by faculty name - faculty not found")
+    @Test
+    void searchUsersByFacultyName_FacultyNotFound() {
+        when(facultyClient.getFacultyId(anyString())).thenThrow(FeignException.class);
+
+        Page<UserResponse> users = userService.searchUsersByFacultyName("Faculty of Computer Science",
+                Pageable.unpaged());
+
+        assertEquals(0, users.getTotalElements());
+    }
+
+    @DisplayName("Get users by faculty name")
+    @Test
+    void searchUsersByFacultyName() {
+        Map<String, Integer> response = Collections.singletonMap("facultyId", 1);
+        User user = buildUser();
+        Page<User> userPage = new PageImpl<>(List.of(user), Pageable.unpaged(), 1);
+
+        when(facultyClient.getFacultyId(anyString())).thenReturn(response);
+        when(userRepository.findByFacultyId(anyInt(), any())).thenReturn(userPage);
+
+        Page<UserResponse> users = userService.searchUsersByFacultyName("Faculty of Computer Science",
+                Pageable.unpaged());
+
+        assertEquals(1, users.getTotalElements());
     }
 
     private User buildUser() {

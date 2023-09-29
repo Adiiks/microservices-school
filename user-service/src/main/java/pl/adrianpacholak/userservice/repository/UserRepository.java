@@ -11,4 +11,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("SELECT user FROM User user " +
             "WHERE UPPER(CONCAT(user.names, ' ', user.lastname)) LIKE UPPER(CONCAT('%', :fullName, '%'))")
     Page<User> findByFullNameLike(String fullName, Pageable pageable);
+
+    Page<User> findByFacultyId(Integer facultyId, Pageable pageable);
 }

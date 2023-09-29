@@ -1,5 +1,6 @@
 package pl.adrianpacholak.userservice.service;
 
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -48,5 +49,23 @@ public class UserService {
                 .map(user -> userConverter.userToUserResponse(user,
                         new FacultyDTO(user.getFacultyId(), faculties.get(user.getFacultyId()))))
                 .toList();
+    }
+
+    public Page<UserResponse> searchUsersByFacultyName(String facultyName, Pageable pageable) {
+        Map<String, Integer> response = null;
+
+        try {
+            response = facultyClient.getFacultyId(facultyName);
+        } catch (FeignException ex) {
+            return Page.empty();
+        }
+
+        Page<User> users = userRepository.findByFacultyId(response.get("facultyId"), pageable);
+
+        List<UserResponse> userResponseList = users.get()
+                .map(user -> userConverter.userToUserResponse(user, new FacultyDTO(user.getFacultyId(), facultyName)))
+                .toList();
+
+        return new PageImpl<>(userResponseList, users.getPageable(), users.getTotalElements());
     }
 }

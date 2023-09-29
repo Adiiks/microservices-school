@@ -66,4 +66,23 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(users)));
     }
+
+    @DisplayName("Search users by faculty name")
+    @Test
+    void searchUsersByFacultyName() throws Exception {
+        FacultyDTO facultyDTO = new FacultyDTO(1, "Faculty of Computer Science");
+        UserResponse userResponse = new UserResponse(1, "Jan", "Kowalski", "jan@gmail.com", "teacher", "www.home.pl",
+                facultyDTO);
+        Page<UserResponse> users = new PageImpl<>(List.of(userResponse), Pageable.ofSize(20), 1);
+
+        when(userService.searchUsersByFacultyName(anyString(), any()))
+                .thenReturn(users);
+
+        mockMvc.perform(get("/users/search/faculty-name")
+                        .param("facultyName", "Faculty of Computer Science")
+                        .param("size", "20")
+                        .param("page", "0"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(users)));
+    }
 }
