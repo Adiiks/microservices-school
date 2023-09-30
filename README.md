@@ -33,6 +33,9 @@ Service for managing faculties (example: Faculty of Computer Science). Service o
 - getting list of faculties based on passed list of ids
 - getting ID of faculty based on faculty name
 - getting list of faculties (pagination)
+## Course Service
+
+Service for managing courses. Service offers following features:
 ## Docker Compose
 
 Docker compose file for running services. Currently only contains Configserver, Eureka server, MySQL and Keycloak.
