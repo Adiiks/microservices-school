@@ -28,6 +28,9 @@ public class SecurityConfig {
             // FACULTY-SERVICE
             exchange.pathMatchers(HttpMethod.POST, "/faculty-service/faculties").hasRole("ADMIN");
 
+            // COURSE-SERVICE
+            exchange.pathMatchers(HttpMethod.POST, "/course-service/courses").hasRole("ADMIN");
+
             // GENERAL
             exchange.anyExchange().authenticated();
         })
