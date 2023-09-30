@@ -2,9 +2,12 @@ package pl.adrianpacholak.facultyservice.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import pl.adrianpacholak.facultyservice.dto.FacultyRequest;
+import pl.adrianpacholak.facultyservice.dto.FacultyResponse;
 import pl.adrianpacholak.facultyservice.service.FacultyService;
 
 import java.util.Collections;
@@ -38,5 +41,10 @@ public class FacultyController {
     @GetMapping("/faculty-name/{facultyName}")
     public Map<String, Integer> getFacultyId(@PathVariable String facultyName) {
         return facultyService.getFacultyIdByName(facultyName);
+    }
+
+    @GetMapping
+    public Page<FacultyResponse> getFaculties(Pageable pageable) {
+        return facultyService.getFaculties(pageable);
     }
 }

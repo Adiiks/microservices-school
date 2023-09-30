@@ -1,12 +1,16 @@
 package pl.adrianpacholak.facultyservice.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import pl.adrianpacholak.facultyservice.converter.FacultyConverter;
 import pl.adrianpacholak.facultyservice.dto.FacultyRequest;
+import pl.adrianpacholak.facultyservice.dto.FacultyResponse;
 import pl.adrianpacholak.facultyservice.model.Faculty;
 import pl.adrianpacholak.facultyservice.repository.FacultyRepository;
 
@@ -50,5 +54,15 @@ public class FacultyService {
                         "Faculty not found"));
 
         return Collections.singletonMap("facultyId", faculty.getId());
+    }
+
+    public Page<FacultyResponse> getFaculties(Pageable pageable) {
+        Page<Faculty> facultyPage =  facultyRepository.findAll(pageable);
+
+        List<FacultyResponse> faculties = facultyPage.get()
+                .map(facultyConverter::facultyToFacultyResponse)
+                .toList();
+
+        return new PageImpl<>(faculties, facultyPage.getPageable(), facultyPage.getTotalElements());
     }
 }

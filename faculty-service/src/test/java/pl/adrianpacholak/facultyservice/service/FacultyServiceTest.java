@@ -8,9 +8,13 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.server.ResponseStatusException;
 import pl.adrianpacholak.facultyservice.converter.FacultyConverter;
 import pl.adrianpacholak.facultyservice.dto.FacultyRequest;
+import pl.adrianpacholak.facultyservice.dto.FacultyResponse;
 import pl.adrianpacholak.facultyservice.model.Faculty;
 import pl.adrianpacholak.facultyservice.repository.FacultyRepository;
 
@@ -111,5 +115,26 @@ class FacultyServiceTest {
         Map<String, Integer> facultyIdResponse = facultyService.getFacultyIdByName("Faculty of Computer Science");
 
         assertEquals(facultyId, facultyIdResponse.get("facultyId"));
+    }
+
+    @DisplayName("Get list of all faculties")
+    @Test
+    void getFaculties() {
+        Page<Faculty> facultyPage = new PageImpl<>(List.of(buildFaculty()), Pageable.unpaged(), 1);
+
+        when(facultyRepository.findAll(any(Pageable.class))).thenReturn(facultyPage);
+
+        Page<FacultyResponse> facultyResponsePage = facultyService.getFaculties(Pageable.unpaged());
+
+        assertEquals(1, facultyResponsePage.getTotalElements());
+    }
+
+    private Faculty buildFaculty() {
+        return Faculty.builder()
+                .id(1)
+                .name("Faculty of Computer Science")
+                .phoneNumber("123456789")
+                .address("ul.Mikołajki 12")
+                .build();
     }
 }
