@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: lesson-service
+  config:
+    import: configserver:http://localhost:8888
+

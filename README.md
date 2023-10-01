@@ -38,6 +38,9 @@ Service for managing faculties (example: Faculty of Computer Science). Service o
 Service for managing courses. Service offers following features:
 
 - creating new course
+## Lesson Service
+
+Service for managing lessons. Service offers following features:
 ## Docker Compose
 
 Docker compose file for running services. Currently only contains Configserver, Eureka server, MySQL and Keycloak.
