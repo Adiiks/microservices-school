@@ -18,6 +18,10 @@ import pl.adrianpacholak.courseservice.service.CourseService;
 import java.math.BigDecimal;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -63,5 +67,15 @@ class CourseControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated());
+    }
+
+    @DisplayName("Check if course exists based on ID")
+    @Test
+    void checkCourseExists() throws Exception {
+        when(courseService.checkCourseExists(anyInt())).thenReturn(true);
+
+        mockMvc.perform(get("/courses/exists/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("exists", is(true)));
     }
 }

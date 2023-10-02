@@ -33,4 +33,8 @@ public class CourseService {
         Course newCourse = courseConverter.courseRequestToCourse(request);
         courseRepository.save(newCourse);
     }
+
+    public boolean checkCourseExists(Integer courseId) {
+        return courseRepository.existsById(courseId);
+    }
 }
