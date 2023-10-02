@@ -38,10 +38,10 @@ public class Lesson {
     private DayOfWeek day;
 
     @Column(nullable = false)
-    private Integer beginTime;
+    private String beginTime;
 
     @Column(nullable = false)
-    private Integer endTime;
+    private String endTime;
 
     @Column(nullable = false)
     private Integer classroom;
