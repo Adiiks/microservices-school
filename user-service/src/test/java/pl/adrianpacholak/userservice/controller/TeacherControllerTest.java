@@ -16,6 +16,10 @@ import pl.adrianpacholak.userservice.dto.UserDTO;
 import pl.adrianpacholak.userservice.service.TeacherService;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -63,5 +67,15 @@ class TeacherControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(teacherDTO)))
                 .andExpect(status().isCreated());
+    }
+
+    @DisplayName("Check if teacher exists based on ID")
+    @Test
+    void checkTeacherExists() throws Exception {
+        when(teacherService.checkTeacherExists(anyInt())).thenReturn(true);
+
+        mockMvc.perform(get("/teachers/exists/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("exists", is(true)));
     }
 }

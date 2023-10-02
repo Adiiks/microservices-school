@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import pl.adrianpacholak.userservice.dto.TeacherDTO;
 import pl.adrianpacholak.userservice.service.TeacherService;
 
+import java.util.Collections;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/teachers")
 @RequiredArgsConstructor
@@ -18,5 +21,10 @@ public class TeacherController {
     @ResponseStatus(HttpStatus.CREATED)
     public void createTeacher(@Valid @RequestBody TeacherDTO teacherDTO) {
         teacherService.createTeacher(teacherDTO);
+    }
+
+    @GetMapping("/exists/{teacherId}")
+    public Map<String, Boolean> checkTeacherExists(@PathVariable Integer teacherId) {
+        return Collections.singletonMap("exists", teacherService.checkTeacherExists(teacherId));
     }
 }

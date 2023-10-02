@@ -38,4 +38,8 @@ public class TeacherService {
 
         teacherRepository.save(newTeacher);
     }
+
+    public boolean checkTeacherExists(Integer teacherId) {
+        return teacherRepository.existsById(teacherId);
+    }
 }
