@@ -45,6 +45,7 @@ Service for managing courses. Service offers following features:
 Service for managing lessons. Service offers following features:
 
 - creating new lesson
+- opening registration for lesson
 ## Docker Compose
 
 Docker compose file for running services. Currently only contains Configserver, Eureka server, MySQL and Keycloak.
