@@ -16,6 +16,7 @@ import pl.adrianpacholak.courseservice.model.ELanguage;
 import pl.adrianpacholak.courseservice.service.CourseService;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -77,5 +78,16 @@ class CourseControllerTest {
         mockMvc.perform(get("/courses/exists/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("exists", is(true)));
+    }
+
+    @DisplayName("Get courses based on list of IDs")
+    @Test
+    void getCoursesByIds() throws Exception {
+        List<Integer> ids = List.of(1);
+
+        mockMvc.perform(get("/courses/ids")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(ids)))
+                .andExpect(status().isOk());
     }
 }

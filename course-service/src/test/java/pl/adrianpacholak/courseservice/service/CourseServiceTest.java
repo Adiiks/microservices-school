@@ -12,15 +12,18 @@ import org.springframework.web.server.ResponseStatusException;
 import pl.adrianpacholak.courseservice.client.FacultyClient;
 import pl.adrianpacholak.courseservice.converter.CourseConverter;
 import pl.adrianpacholak.courseservice.dto.CourseRequest;
+import pl.adrianpacholak.courseservice.dto.CourseResponse;
 import pl.adrianpacholak.courseservice.model.Course;
 import pl.adrianpacholak.courseservice.model.ELanguage;
 import pl.adrianpacholak.courseservice.repository.CourseRepository;
 
 import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -74,6 +77,18 @@ class CourseServiceTest {
         assertEquals(request.language(), course.getLanguage());
         assertEquals(request.name(), course.getName());
         assertNull(course.getId());
+    }
+
+    @DisplayName("Get courses based on list of IDs")
+    @Test
+    void getCoursesByIds() {
+        Course course = Course.builder().id(1).name("Programming").build();
+
+        when(courseRepository.findAllByIdIn(anyList())).thenReturn(List.of(course));
+
+        List<CourseResponse> courses = courseService.getCoursesByIds(List.of(1));
+
+        assertEquals(1, courses.size());
     }
 
     private CourseRequest buildCourseRequest() {

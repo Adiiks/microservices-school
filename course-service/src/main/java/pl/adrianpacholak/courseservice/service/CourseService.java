@@ -8,9 +8,11 @@ import org.springframework.web.server.ResponseStatusException;
 import pl.adrianpacholak.courseservice.client.FacultyClient;
 import pl.adrianpacholak.courseservice.converter.CourseConverter;
 import pl.adrianpacholak.courseservice.dto.CourseRequest;
+import pl.adrianpacholak.courseservice.dto.CourseResponse;
 import pl.adrianpacholak.courseservice.model.Course;
 import pl.adrianpacholak.courseservice.repository.CourseRepository;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -36,5 +38,12 @@ public class CourseService {
 
     public boolean checkCourseExists(Integer courseId) {
         return courseRepository.existsById(courseId);
+    }
+
+    public List<CourseResponse> getCoursesByIds(List<Integer> ids) {
+        return courseRepository.findAllByIdIn(ids)
+                .stream()
+                .map(courseConverter::courseToCourseResponse)
+                .toList();
     }
 }
