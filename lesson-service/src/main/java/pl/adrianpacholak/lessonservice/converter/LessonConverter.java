@@ -1,7 +1,10 @@
 package pl.adrianpacholak.lessonservice.converter;
 
 import org.springframework.stereotype.Component;
+import pl.adrianpacholak.lessonservice.dto.CourseResponse;
 import pl.adrianpacholak.lessonservice.dto.LessonRequest;
+import pl.adrianpacholak.lessonservice.dto.LessonResponse;
+import pl.adrianpacholak.lessonservice.dto.TeacherResponse;
 import pl.adrianpacholak.lessonservice.model.Lesson;
 
 @Component
@@ -21,5 +24,10 @@ public class LessonConverter {
                 .teacherId(request.teacherId())
                 .totalStudentsSigned(0)
                 .build();
+    }
+
+    public LessonResponse lessonToLessonResponse(Lesson lesson, TeacherResponse teacher, CourseResponse course) {
+        return new LessonResponse(lesson.getId(), lesson.getType(), teacher, course, lesson.getTotalStudentsSigned(),
+                lesson.getLimitOfPlaces());
     }
 }

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.DayOfWeek;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "lessons")
@@ -54,4 +56,11 @@ public class Lesson {
 
     @Column(nullable = false)
     private Integer teacherId;
+
+    @ElementCollection
+    private Set<String> students = new HashSet<>();
+
+    public boolean isStudentSignUp(String username) {
+        return students.contains(username);
+    }
 }

@@ -30,7 +30,7 @@ public class CourseController {
         return Collections.singletonMap("exists", courseService.checkCourseExists(courseId));
     }
 
-    @GetMapping("/ids")
+    @PostMapping("/ids")
     public List<CourseResponse> getCoursesByIds(@RequestBody List<Integer> ids) {
         return courseService.getCoursesByIds(ids);
     }

@@ -30,7 +30,7 @@ public class TeacherController {
         return Collections.singletonMap("exists", teacherService.checkTeacherExists(teacherId));
     }
 
-    @GetMapping("/ids")
+    @PostMapping("/ids")
     public List<TeacherResponse> getTeachersByIds(@RequestBody List<Integer> ids) {
         return teacherService.getTeachersByIds(ids);
     }

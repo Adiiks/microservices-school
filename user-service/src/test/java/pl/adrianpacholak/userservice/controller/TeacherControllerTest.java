@@ -84,7 +84,7 @@ class TeacherControllerTest {
     @DisplayName("Get list of teachers based on list of IDs")
     @Test
     void getTeachersByIds() throws Exception {
-        mockMvc.perform(get("/teachers/ids")
+        mockMvc.perform(post("/teachers/ids")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(List.of(1, 2, 3))))
                 .andExpect(status().isOk());

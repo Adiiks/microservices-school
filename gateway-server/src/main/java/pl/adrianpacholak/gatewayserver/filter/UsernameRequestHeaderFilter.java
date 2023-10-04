@@ -6,11 +6,11 @@ import org.springframework.stereotype.Component;
 import pl.adrianpacholak.gatewayserver.utils.JwtUtils;
 
 @Component
-public class AuthenticationFilter extends AbstractGatewayFilterFactory {
+public class UsernameRequestHeaderFilter extends AbstractGatewayFilterFactory<Object> {
 
     private final JwtUtils jwtUtils;
 
-    public AuthenticationFilter(JwtUtils jwtUtils) {
+    public UsernameRequestHeaderFilter(JwtUtils jwtUtils) {
         this.jwtUtils = jwtUtils;
     }
 
@@ -19,7 +19,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory {
         return ((exchange, chain) -> {
             String username = jwtUtils.getUsername(exchange.getRequest().getHeaders());
 
-            exchange.getRequest().getHeaders().add("username", username);
+            exchange.getRequest().mutate().header("username", username);
 
             return chain.filter(exchange);
         });
