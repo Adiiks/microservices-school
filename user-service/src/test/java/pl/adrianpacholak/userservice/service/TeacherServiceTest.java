@@ -12,12 +12,14 @@ import org.springframework.web.server.ResponseStatusException;
 import pl.adrianpacholak.userservice.client.FacultyClient;
 import pl.adrianpacholak.userservice.converter.TeacherConverter;
 import pl.adrianpacholak.userservice.dto.TeacherDTO;
+import pl.adrianpacholak.userservice.dto.TeacherResponse;
 import pl.adrianpacholak.userservice.dto.UserDTO;
 import pl.adrianpacholak.userservice.model.Teacher;
 import pl.adrianpacholak.userservice.repository.TeacherRepository;
 import pl.adrianpacholak.userservice.service.client.KeycloakClient;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -89,5 +91,28 @@ class TeacherServiceTest {
                 .thenReturn(response);
 
         assertThrows(ResponseStatusException.class, () -> teacherService.createTeacher(teacherDTO));
+    }
+
+    @DisplayName("Get list of teachers based on list of IDs")
+    @Test
+    void getTeachersByIds() {
+        List<Integer> ids = List.of(1);
+        Teacher teacherDb = buildTeacher();
+
+        when(teacherRepository.findAllByIdIn(anyList())).thenReturn(List.of(teacherDb));
+
+        List<TeacherResponse> teachers = teacherService.getTeachersByIds(ids);
+        TeacherResponse teacher = teachers.get(0);
+
+        assertNotNull(teacher.id());
+        assertNotNull(teacher.fullName());
+    }
+
+    private Teacher buildTeacher() {
+        return Teacher.builder()
+                .id(1)
+                .names("Jan")
+                .lastname("Kowalski")
+                .build();
     }
 }

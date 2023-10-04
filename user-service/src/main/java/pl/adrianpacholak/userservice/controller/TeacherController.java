@@ -5,9 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import pl.adrianpacholak.userservice.dto.TeacherDTO;
+import pl.adrianpacholak.userservice.dto.TeacherResponse;
 import pl.adrianpacholak.userservice.service.TeacherService;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -26,5 +28,10 @@ public class TeacherController {
     @GetMapping("/exists/{teacherId}")
     public Map<String, Boolean> checkTeacherExists(@PathVariable Integer teacherId) {
         return Collections.singletonMap("exists", teacherService.checkTeacherExists(teacherId));
+    }
+
+    @GetMapping("/ids")
+    public List<TeacherResponse> getTeachersByIds(@RequestBody List<Integer> ids) {
+        return teacherService.getTeachersByIds(ids);
     }
 }

@@ -15,6 +15,8 @@ import pl.adrianpacholak.userservice.dto.TeacherDTO;
 import pl.adrianpacholak.userservice.dto.UserDTO;
 import pl.adrianpacholak.userservice.service.TeacherService;
 
+import java.util.List;
+
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -77,5 +79,14 @@ class TeacherControllerTest {
         mockMvc.perform(get("/teachers/exists/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("exists", is(true)));
+    }
+
+    @DisplayName("Get list of teachers based on list of IDs")
+    @Test
+    void getTeachersByIds() throws Exception {
+        mockMvc.perform(get("/teachers/ids")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(List.of(1, 2, 3))))
+                .andExpect(status().isOk());
     }
 }

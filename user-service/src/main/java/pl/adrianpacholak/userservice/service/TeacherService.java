@@ -8,11 +8,13 @@ import org.springframework.web.server.ResponseStatusException;
 import pl.adrianpacholak.userservice.client.FacultyClient;
 import pl.adrianpacholak.userservice.converter.TeacherConverter;
 import pl.adrianpacholak.userservice.dto.TeacherDTO;
+import pl.adrianpacholak.userservice.dto.TeacherResponse;
 import pl.adrianpacholak.userservice.model.ERole;
 import pl.adrianpacholak.userservice.model.Teacher;
 import pl.adrianpacholak.userservice.repository.TeacherRepository;
 import pl.adrianpacholak.userservice.service.client.KeycloakClient;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -41,5 +43,12 @@ public class TeacherService {
 
     public boolean checkTeacherExists(Integer teacherId) {
         return teacherRepository.existsById(teacherId);
+    }
+
+    public List<TeacherResponse> getTeachersByIds(List<Integer> ids) {
+        return teacherRepository.findAllByIdIn(ids)
+                .stream()
+                .map(teacherConverter::teacherToTeacherResponse)
+                .toList();
     }
 }
