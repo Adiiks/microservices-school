@@ -92,6 +92,22 @@ public class RegistrationService {
         return new PageImpl<>(registrations, registrationPageDb.getPageable(), registrationPageDb.getTotalElements());
     }
 
+    @Transactional
+    public void registerStudentToLesson(Integer registrationId, String username) {
+        Registration registration = findRegistration(registrationId);
+        checkStudentExists(username);
+
+        Lesson lesson = registration.getLesson();
+        if (lesson.isStudentSignUp(username)) {
+            lesson.unregisterStudent(username);
+        } else {
+            checkLessonAvailablePlaces(lesson);
+            lesson.registerStudent(username);
+        }
+
+        lessonRepository.save(lesson);
+    }
+
     private Map<Integer, TeacherResponse> getTeachersByIds(List<Integer> ids) {
         return userClient.getTeachersByIds(ids)
                 .stream()
@@ -102,5 +118,28 @@ public class RegistrationService {
         return courseClient.getCoursesByIds(ids)
                 .stream()
                 .collect(Collectors.toMap(CourseResponse::id, courseResponse -> courseResponse));
+    }
+
+    private Registration findRegistration(Integer id) {
+        return registrationRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Registration with ID: %d not found.", id)));
+    }
+
+    private void checkStudentExists(String username) {
+        boolean studentExists =  userClient.checkStudentExists(username)
+                .get("exists");
+
+        if (!studentExists) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    String.format("Student with username: %s not exists.", username));
+        }
+    }
+
+    private void checkLessonAvailablePlaces(Lesson lesson) {
+        if (lesson.getLimitOfPlaces().equals(lesson.getTotalStudentsSigned())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Already reached in lesson limit of places");
+        }
     }
 }

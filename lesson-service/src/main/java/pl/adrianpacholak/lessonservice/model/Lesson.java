@@ -63,4 +63,14 @@ public class Lesson {
     public boolean isStudentSignUp(String username) {
         return students.contains(username);
     }
+
+    public void registerStudent(String username) {
+        students.add(username);
+        totalStudentsSigned++;
+    }
+
+    public void unregisterStudent(String username) {
+        students.remove(username);
+        totalStudentsSigned--;
+    }
 }

@@ -27,4 +27,10 @@ public class RegistrationController {
     public Page<RegistrationResponse> getRegistrations(@RequestHeader("username") String username, Pageable pageable) {
         return registrationService.getRegistrations(username, pageable);
     }
+
+    @PutMapping("/register/{registrationId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void registerStudentToLesson(@PathVariable Integer registrationId, @RequestHeader String username) {
+        registrationService.registerStudentToLesson(registrationId, username);
+    }
 }

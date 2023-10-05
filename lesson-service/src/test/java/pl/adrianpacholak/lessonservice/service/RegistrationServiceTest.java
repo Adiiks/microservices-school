@@ -26,6 +26,7 @@ import pl.adrianpacholak.lessonservice.repository.RegistrationRepository;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -56,6 +57,9 @@ class RegistrationServiceTest {
 
     @Captor
     private ArgumentCaptor<Registration> registrationAc;
+
+    @Captor
+    private ArgumentCaptor<Lesson> lessonAc;
 
     @BeforeEach
     void setUp() {
@@ -157,5 +161,92 @@ class RegistrationServiceTest {
                 .endDateTime(LocalDateTime.now().plusDays(10))
                 .lesson(buildLesson())
                 .build();
+    }
+
+    @DisplayName("Register student to lesson - Registration not found")
+    @Test
+    void registerStudentToLesson_RegistrationNotFound() {
+        when(registrationRepository.findById(anyInt()))
+                .thenReturn(Optional.empty());
+
+        assertThrows(ResponseStatusException.class, () ->
+                registrationService.registerStudentToLesson(1, "username"));
+    }
+
+    @DisplayName("Register student to lesson - Student not found")
+    @Test
+    void registerStudentToLesson_StudentNotFound() {
+        Registration registration = buildRegistration();
+
+        when(registrationRepository.findById(anyInt()))
+                .thenReturn(Optional.of(registration));
+
+        when(userClient.checkStudentExists(anyString()))
+                .thenReturn(Collections.singletonMap("exists", false));
+
+        assertThrows(ResponseStatusException.class, () ->
+                registrationService.registerStudentToLesson(registration.getId(), "username"));
+    }
+
+    @DisplayName("Register student to lesson - Student already register")
+    @Test
+    void registerStudentToLesson_StudentAlreadyRegister() {
+        Registration registration = buildRegistration();
+        String username = "012345678901";
+        registration.getLesson().getStudents().add(username);
+        Integer totalStudentsBeforeRegister = registration.getLesson().getTotalStudentsSigned();
+
+        when(registrationRepository.findById(anyInt()))
+                .thenReturn(Optional.of(registration));
+
+        when(userClient.checkStudentExists(anyString()))
+                .thenReturn(Collections.singletonMap("exists", true));
+
+        registrationService.registerStudentToLesson(registration.getId(), username);
+
+        verify(lessonRepository).save(lessonAc.capture());
+        Lesson lesson = lessonAc.getValue();
+
+        assertFalse(lesson.isStudentSignUp(username));
+        assertEquals(--totalStudentsBeforeRegister, lesson.getTotalStudentsSigned());
+    }
+
+    @DisplayName("Register student to lesson - Reached limit of places")
+    @Test
+    void registerStudentToLesson_ReachedLimit() {
+        Registration registration = buildRegistration();
+        String username = "012345678901";
+        registration.getLesson().setTotalStudentsSigned(registration.getLesson().getLimitOfPlaces());
+
+        when(registrationRepository.findById(anyInt()))
+                .thenReturn(Optional.of(registration));
+
+        when(userClient.checkStudentExists(anyString()))
+                .thenReturn(Collections.singletonMap("exists", true));
+
+        assertThrows(ResponseStatusException.class, () ->
+                registrationService.registerStudentToLesson(registration.getId(), username));
+    }
+
+    @DisplayName("Register student to lesson")
+    @Test
+    void registerStudentToLesson() {
+        Registration registration = buildRegistration();
+        String username = "012345678901";
+        Integer totalStudentsBeforeRegister = registration.getLesson().getTotalStudentsSigned();
+
+        when(registrationRepository.findById(anyInt()))
+                .thenReturn(Optional.of(registration));
+
+        when(userClient.checkStudentExists(anyString()))
+                .thenReturn(Collections.singletonMap("exists", true));
+
+        registrationService.registerStudentToLesson(registration.getId(), username);
+
+        verify(lessonRepository).save(lessonAc.capture());
+        Lesson lesson = lessonAc.getValue();
+
+        assertTrue(lesson.isStudentSignUp(username));
+        assertEquals(++totalStudentsBeforeRegister, lesson.getTotalStudentsSigned());
     }
 }

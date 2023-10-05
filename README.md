@@ -26,6 +26,7 @@ Service for managing users. We have three types of user: Admin, Teacher and Stud
 - getting list of users (pagination) based on faculty name
 - checking if teacher exists based on ID
 - getting list of teachers based on list of IDs
+- checking if student exists based on username
 ## Faculty Service
 
 Service for managing faculties (example: Faculty of Computer Science). Service offers following features:
@@ -49,6 +50,7 @@ Service for managing lessons. Service offers following features:
 - creating new lesson
 - opening registration for lesson
 - getting list of registrations (pagination)
+- student can register or unregister to lesson
 ## Docker Compose
 
 Docker compose file for running services. Currently only contains Configserver, Eureka server, MySQL and Keycloak.

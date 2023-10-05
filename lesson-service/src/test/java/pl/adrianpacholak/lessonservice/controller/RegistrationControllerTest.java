@@ -25,8 +25,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -86,5 +85,13 @@ class RegistrationControllerTest {
                 .header("username", "12345678901"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(response)));
+    }
+
+    @DisplayName("Register student to lesson")
+    @Test
+    void registerStudentToLesson() throws Exception {
+        mockMvc.perform(put("/lessons/registrations/register/1")
+                .header("username", "12345678901"))
+                .andExpect(status().isNoContent());
     }
 }

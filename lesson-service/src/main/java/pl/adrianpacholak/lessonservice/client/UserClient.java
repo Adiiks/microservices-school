@@ -1,10 +1,7 @@
 package pl.adrianpacholak.lessonservice.client;
 
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import pl.adrianpacholak.lessonservice.dto.TeacherResponse;
 
 import java.util.List;
@@ -18,4 +15,7 @@ public interface UserClient {
 
     @PostMapping("/teachers/ids")
     List<TeacherResponse> getTeachersByIds(@RequestBody List<Integer> ids);
+
+    @GetMapping("/students/exists/username")
+    Map<String, Boolean> checkStudentExists(@RequestParam String username);
 }
