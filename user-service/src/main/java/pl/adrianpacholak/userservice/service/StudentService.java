@@ -39,4 +39,8 @@ public class StudentService {
 
         studentRepository.save(newStudent);
     }
+
+    public Boolean checkStudentExists(String username) {
+        return studentRepository.existsByPesel(username);
+    }
 }

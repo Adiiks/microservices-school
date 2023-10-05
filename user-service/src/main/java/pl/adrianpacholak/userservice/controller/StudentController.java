@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import pl.adrianpacholak.userservice.dto.StudentDTO;
 import pl.adrianpacholak.userservice.service.StudentService;
 
+import java.util.Collections;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/students")
 @RequiredArgsConstructor
@@ -18,5 +21,10 @@ public class StudentController {
     @ResponseStatus(HttpStatus.CREATED)
     public void createStudent(@Valid @RequestBody StudentDTO studentDTO) {
         studentService.createStudent(studentDTO);
+    }
+
+    @GetMapping("/exists/username")
+    public Map<String, Boolean> checkStudentExists(@RequestParam String username) {
+        return Collections.singletonMap("exists", studentService.checkStudentExists(username));
     }
 }
