@@ -51,6 +51,12 @@ Service for managing lessons. Service offers following features:
 - opening registration for lesson
 - getting list of registrations (pagination)
 - student can register or unregister to lesson
+- checking if lesson exists based on ID
+## Attendance Service
+
+Service for managing attendacies. Service offers following features:
+
+- creating list of attendacies of students
 ## Docker Compose
 
 Docker compose file for running services. Currently only contains Configserver, Eureka server, MySQL and Keycloak.
