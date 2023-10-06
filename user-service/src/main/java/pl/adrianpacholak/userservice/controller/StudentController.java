@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import pl.adrianpacholak.userservice.dto.StudentDTO;
+import pl.adrianpacholak.userservice.dto.StudentResponse;
 import pl.adrianpacholak.userservice.service.StudentService;
 
 import java.util.Collections;
@@ -26,5 +27,10 @@ public class StudentController {
     @GetMapping("/exists/username")
     public Map<String, Boolean> checkStudentExists(@RequestParam String username) {
         return Collections.singletonMap("exists", studentService.checkStudentExists(username));
+    }
+
+    @GetMapping("/{studentId}")
+    public StudentResponse getStudent(@PathVariable Integer studentId) {
+        return studentService.getStudent(studentId);
     }
 }

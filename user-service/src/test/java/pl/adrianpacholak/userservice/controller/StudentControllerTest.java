@@ -80,4 +80,11 @@ class StudentControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("exists", is(true)));
     }
+
+    @DisplayName("Get student by ID")
+    @Test
+    void getStudent() throws Exception {
+        mockMvc.perform(get("/students/1"))
+                .andExpect(status().isOk());
+    }
 }

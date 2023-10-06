@@ -8,6 +8,7 @@ import org.springframework.web.server.ResponseStatusException;
 import pl.adrianpacholak.userservice.client.FacultyClient;
 import pl.adrianpacholak.userservice.converter.StudentConverter;
 import pl.adrianpacholak.userservice.dto.StudentDTO;
+import pl.adrianpacholak.userservice.dto.StudentResponse;
 import pl.adrianpacholak.userservice.model.ERole;
 import pl.adrianpacholak.userservice.model.Student;
 import pl.adrianpacholak.userservice.repository.StudentRepository;
@@ -42,5 +43,17 @@ public class StudentService {
 
     public Boolean checkStudentExists(String username) {
         return studentRepository.existsByPesel(username);
+    }
+
+    public StudentResponse getStudent(Integer studentId) {
+        Student student = findStudent(studentId);
+
+        return studentConverter.studentToStudentResponse(student);
+    }
+
+    private Student findStudent(Integer studentId) {
+        return studentRepository.findById(studentId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Student with ID: %d not found.", studentId)));
     }
 }
