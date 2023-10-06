@@ -68,4 +68,8 @@ public class LessonService {
 
         return teacherExists.get("exists");
     }
+
+    public boolean checkLessonExists(Integer lessonId) {
+        return lessonRepository.existsById(lessonId);
+    }
 }

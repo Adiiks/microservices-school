@@ -20,6 +20,10 @@ import pl.adrianpacholak.lessonservice.service.LessonService;
 import java.time.DayOfWeek;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -66,5 +70,18 @@ class LessonControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated());
+    }
+
+    @DisplayName("Check if lesson exists based on ID")
+    @Test
+    void checkLessonExists() throws Exception {
+        boolean exists = true;
+
+        when(lessonService.checkLessonExists(anyInt()))
+                .thenReturn(exists);
+
+        mockMvc.perform(get("/lessons/exists/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("exists", is(exists)));
     }
 }
