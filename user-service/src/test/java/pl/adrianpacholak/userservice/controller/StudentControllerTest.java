@@ -15,6 +15,8 @@ import pl.adrianpacholak.userservice.dto.StudentDTO;
 import pl.adrianpacholak.userservice.dto.UserDTO;
 import pl.adrianpacholak.userservice.service.StudentService;
 
+import java.util.List;
+
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -85,6 +87,15 @@ class StudentControllerTest {
     @Test
     void getStudent() throws Exception {
         mockMvc.perform(get("/students/1"))
+                .andExpect(status().isOk());
+    }
+
+    @DisplayName("Get students by list of IDs")
+    @Test
+    void getStudentsByIds() throws Exception {
+        mockMvc.perform(post("/students/ids")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(List.of(1, 2))))
                 .andExpect(status().isOk());
     }
 }

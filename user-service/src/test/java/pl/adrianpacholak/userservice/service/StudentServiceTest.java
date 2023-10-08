@@ -19,6 +19,7 @@ import pl.adrianpacholak.userservice.repository.StudentRepository;
 import pl.adrianpacholak.userservice.service.client.KeycloakClient;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -127,5 +128,18 @@ class StudentServiceTest {
                 .isStillStudying(true)
                 .pageUrl("www.home.pl")
                 .build();
+    }
+
+    @DisplayName("Get students by list of IDs")
+    @Test
+    void getStudentsByIds() {
+        List<Student> students = List.of(buildStudent());
+
+        when(studentRepository.findAllByIdIn(anyList()))
+                .thenReturn(students);
+
+        List<StudentResponse> studentResponseList = studentService.getStudentsByIds(List.of(1));
+
+        assertEquals(1, studentResponseList.size());
     }
 }

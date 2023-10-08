@@ -9,6 +9,7 @@ import pl.adrianpacholak.userservice.dto.StudentResponse;
 import pl.adrianpacholak.userservice.service.StudentService;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -32,5 +33,10 @@ public class StudentController {
     @GetMapping("/{studentId}")
     public StudentResponse getStudent(@PathVariable Integer studentId) {
         return studentService.getStudent(studentId);
+    }
+
+    @PostMapping("/ids")
+    public List<StudentResponse> getStudentsByIds(@RequestBody List<Integer> studentsIds) {
+        return studentService.getStudentsByIds(studentsIds);
     }
 }

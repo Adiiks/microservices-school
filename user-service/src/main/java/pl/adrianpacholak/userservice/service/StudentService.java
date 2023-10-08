@@ -14,6 +14,7 @@ import pl.adrianpacholak.userservice.model.Student;
 import pl.adrianpacholak.userservice.repository.StudentRepository;
 import pl.adrianpacholak.userservice.service.client.KeycloakClient;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -55,5 +56,12 @@ public class StudentService {
         return studentRepository.findById(studentId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("Student with ID: %d not found.", studentId)));
+    }
+
+    public List<StudentResponse> getStudentsByIds(List<Integer> studentsIds) {
+        return studentRepository.findAllByIdIn(studentsIds)
+                .stream()
+                .map(studentConverter::studentToStudentResponse)
+                .toList();
     }
 }
